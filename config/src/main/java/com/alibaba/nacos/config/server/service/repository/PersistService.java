@@ -1173,6 +1173,13 @@ public interface PersistService {
      * @return fuzzy search Sql
      */
     String generateLikeArgument(String s);
+
+    /**
+     * 生成全模糊查询sql
+     * @param s 目标字段
+     * @return 全模糊查询sql
+     */
+    String generateFullFuzzyArgument(String s);
     
     /**
      * Query config info.

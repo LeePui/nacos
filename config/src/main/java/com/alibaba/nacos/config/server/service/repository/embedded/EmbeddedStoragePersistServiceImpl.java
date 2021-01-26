@@ -1501,11 +1501,11 @@ public class EmbeddedStoragePersistServiceImpl implements PersistService {
             where.append(" a.tenant_id like ? ");
             if (!StringUtils.isBlank(dataId)) {
                 where.append(" and a.data_id like ? ");
-                params.add(generateLikeArgument(dataId));
+                params.add(generateFullFuzzyArgument(dataId));
             }
             if (!StringUtils.isBlank(group)) {
                 where.append(" and a.group_id like ? ");
-                params.add(generateLikeArgument(group));
+                params.add(generateFullFuzzyArgument(group));
             }
             if (!StringUtils.isBlank(appName)) {
                 where.append(" and a.app_name = ? ");
@@ -1530,11 +1530,11 @@ public class EmbeddedStoragePersistServiceImpl implements PersistService {
             where.append(" tenant_id like ? ");
             if (!StringUtils.isBlank(dataId)) {
                 where.append(" and data_id like ? ");
-                params.add(generateLikeArgument(dataId));
+                params.add(generateFullFuzzyArgument(dataId));
             }
             if (!StringUtils.isBlank(group)) {
                 where.append(" and group_id like ? ");
-                params.add(generateLikeArgument(group));
+                params.add(generateFullFuzzyArgument(group));
             }
             if (!StringUtils.isBlank(appName)) {
                 where.append(" and app_name = ? ");
@@ -2196,6 +2196,11 @@ public class EmbeddedStoragePersistServiceImpl implements PersistService {
         } else {
             return s;
         }
+    }
+
+    @Override
+    public String generateFullFuzzyArgument(String s) {
+        return String.format("%%%s%%", s);
     }
     
     @Override

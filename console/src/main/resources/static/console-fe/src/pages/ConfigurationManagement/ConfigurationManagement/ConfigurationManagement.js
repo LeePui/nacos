@@ -268,11 +268,12 @@ class ConfigurationManagement extends React.Component {
     };
     setParams('pageSize', null);
     setParams('pageNo', null);
-    if (this.dataId.indexOf('*') !== -1 || this.group.indexOf('*') !== -1) {
-      params.search = 'blur';
-    } else {
-      params.search = 'accurate';
-    }
+    params.search = 'blur'; //永远使用模糊搜索
+    /*    if (this.dataId.indexOf('*') !== -1 || this.group.indexOf('*') !== -1) {
+          params.search = 'blur';
+        } else {
+          params.search = 'accurate';
+        }*/
     this.setState({ loading: true });
     this.props
       .getConfigs(params)
