@@ -366,7 +366,7 @@ public class ServiceManagerTest extends BaseTest {
         ((Set<Instance>) ReflectionTestUtils.getField(cluster, "ephemeralInstances")).add(instance);
         List<Service> actualServices = new ArrayList<>(8);
         int actualSize = serviceManager
-                .getPagedService(TEST_NAMESPACE, 0, 10, StringUtils.EMPTY, "1.1.1.1:1", actualServices, true);
+                .getPagedService(TEST_NAMESPACE, 0, 10, StringUtils.EMPTY, "1.1.1.1:1", actualServices, true, null);
         assertEquals(1, actualSize);
         assertEquals(TEST_SERVICE_NAME, actualServices.get(0).getName());
     }

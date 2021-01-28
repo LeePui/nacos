@@ -187,5 +187,12 @@ public class Constants {
     public static final String SNOWFLAKE_INSTANCE_ID_GENERATOR = "snowflake";
     
     public static final String HTTP_PREFIX = "http";
-    
+
+    public static final int NEW_SERVICE_SYNC_TYPE = 1;
+
+    public static final int OLD_SERVICE_SYNC_TYPE = 2;
+
+    public static final String SYNC_SOURCE_KEY = "syncSource";
+
+    public static final String OLD_SERVICE_SYNC_VALUE = "ZK";
 }

@@ -923,7 +923,7 @@ public class ServiceManager implements RecordListener<Service> {
     }
     
     public int getPagedService(String namespaceId, int startPage, int pageSize, String param, String containedInstance,
-            List<Service> serviceList, boolean hasIpCount) {
+            List<Service> serviceList, boolean hasIpCount, Integer serviceSyncSourceType) {
         
         List<Service> matchList;
         
@@ -971,6 +971,38 @@ public class ServiceManager implements RecordListener<Service> {
                     matchList.remove(i);
                     i--;
                 }
+            }
+        }
+
+        //筛选新旧服务
+        if (serviceSyncSourceType != null) {
+            //筛选新服务
+            if (serviceSyncSourceType == Constants.NEW_SERVICE_SYNC_TYPE) {
+                matchList = matchList.stream().filter(s -> {
+                    List<Instance> instances = s.getClusterMap().get(Constants.DEFAULT_CLUSTER_NAME).allIPs();
+                    //判断集群下面是否有实例
+                    if (org.apache.commons.collections.CollectionUtils.isEmpty(instances)) {
+                        return false;
+                    }
+                    if (!Constants.OLD_SERVICE_SYNC_VALUE.equals(instances.get(0).getMetadata().get(Constants.SYNC_SOURCE_KEY))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }).collect(Collectors.toList());
+            } else if (serviceSyncSourceType == Constants.OLD_SERVICE_SYNC_TYPE) {
+                matchList = matchList.stream().filter(s -> {
+                    List<Instance> instances = s.getClusterMap().get(Constants.DEFAULT_CLUSTER_NAME).allIPs();
+                    //判断集群下面是否有实例
+                    if (org.apache.commons.collections.CollectionUtils.isEmpty(instances)) {
+                        return false;
+                    }
+                    if (Constants.OLD_SERVICE_SYNC_VALUE.equals(instances.get(0).getMetadata().get(Constants.SYNC_SOURCE_KEY))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }).collect(Collectors.toList());
             }
         }
         

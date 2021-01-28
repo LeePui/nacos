@@ -117,6 +117,10 @@ const I18N_CONF = {
     prompt: '提示',
     promptDelete: '确定要删除当前服务吗？',
     create: '创建服务',
+    serviceSyncSource: '新老服务',
+    oldService: '老服务',
+    newService: '新服务',
+    allService: '全部',
   },
   SubscriberList: {
     subscriberList: '订阅者列表',

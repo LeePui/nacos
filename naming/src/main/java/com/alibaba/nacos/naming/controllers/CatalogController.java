@@ -166,14 +166,15 @@ public class CatalogController {
     /**
      * List service detail information.
      *
-     * @param withInstances     whether return instances
-     * @param namespaceId       namespace id
-     * @param pageNo            number of page
-     * @param pageSize          size of each page
-     * @param serviceName       service name
-     * @param groupName         group name
-     * @param containedInstance instance name pattern which will be contained in detail
-     * @param hasIpCount        whether filter services with empty instance
+     * @param withInstances              whether return instances
+     * @param namespaceId                namespace id
+     * @param pageNo                     number of page
+     * @param pageSize                   size of each page
+     * @param serviceName                service name
+     * @param groupName                  group name
+     * @param containedInstance          instance name pattern which will be contained in detail
+     * @param hasIpCount                 whether filter services with empty instance
+     * @param serviceSyncSourceType      服务类型。"":查询所有; "1":新服务; "2":旧服务
      * @return list service detail
      */
     @Secured(parser = NamingResourceParser.class, action = ActionTypes.READ)
@@ -184,7 +185,8 @@ public class CatalogController {
             @RequestParam(name = "serviceNameParam", defaultValue = StringUtils.EMPTY) String serviceName,
             @RequestParam(name = "groupNameParam", defaultValue = StringUtils.EMPTY) String groupName,
             @RequestParam(name = "instance", defaultValue = StringUtils.EMPTY) String containedInstance,
-            @RequestParam(required = false) boolean hasIpCount) {
+            @RequestParam(required = false) boolean hasIpCount,
+            @RequestParam(name = "serviceSyncSourceType") Integer serviceSyncSourceType) {
         
         String param = StringUtils.isBlank(serviceName) && StringUtils.isBlank(groupName) ? StringUtils.EMPTY
                 : NamingUtils.getGroupedName(serviceName, groupName);
@@ -193,7 +195,7 @@ public class CatalogController {
             List<ServiceDetailInfo> serviceDetailInfoList = new ArrayList<>();
             
             List<Service> services = new ArrayList<>(8);
-            serviceManager.getPagedService(namespaceId, pageNo, pageSize, param, StringUtils.EMPTY, services, false);
+            serviceManager.getPagedService(namespaceId, pageNo, pageSize, param, StringUtils.EMPTY, services, false, serviceSyncSourceType);
             
             for (Service service : services) {
                 ServiceDetailInfo serviceDetailInfo = new ServiceDetailInfo();
@@ -213,13 +215,13 @@ public class CatalogController {
         ObjectNode result = JacksonUtils.createEmptyJsonNode();
         
         List<Service> services = new ArrayList<>();
-        final int total = serviceManager.getPagedService(namespaceId, pageNo - 1, pageSize, param, containedInstance, services, hasIpCount);
+        final int total = serviceManager.getPagedService(namespaceId, pageNo - 1, pageSize, param, containedInstance, services, hasIpCount, serviceSyncSourceType);
         if (CollectionUtils.isEmpty(services)) {
             result.replace("serviceList", JacksonUtils.transferToJsonNode(Collections.emptyList()));
             result.put("count", 0);
             return result;
         }
-        
+
         List<ServiceView> serviceViews = new LinkedList<>();
         for (Service service : services) {
             ServiceView serviceView = new ServiceView();

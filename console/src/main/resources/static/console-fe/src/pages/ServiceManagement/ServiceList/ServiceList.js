@@ -29,6 +29,7 @@ import {
   Message,
   ConfigProvider,
   Switch,
+  Select,
 } from '@alifd/next';
 import { request } from '../../../globalLib';
 import { generateUrl } from '../../../utils/nacosutil';
@@ -65,6 +66,7 @@ class ServiceList extends React.Component {
       search: {
         serviceName: '',
         groupName: '',
+        serviceSource: '',
       },
       hasIpCount: !(localStorage.getItem('hasIpCount') === 'false'),
     };
@@ -94,6 +96,7 @@ class ServiceList extends React.Component {
       `pageSize=${pageSize}`,
       `serviceNameParam=${search.serviceName}`,
       `groupNameParam=${search.groupName}`,
+      `serviceSyncSourceType=${search.serviceSource}`,
     ];
     this.openLoading();
     request({
@@ -187,6 +190,10 @@ class ServiceList extends React.Component {
       detail,
       sampleCode,
       deleteAction,
+      serviceSyncSource,
+      oldService,
+      newService,
+      allService,
     } = locale;
     const { search, nowNamespaceName, nowNamespaceId, hasIpCount } = this.state;
     const { init, getValue } = this.field;
@@ -249,6 +256,19 @@ class ServiceList extends React.Component {
                   }
                 />
               </Form.Item>
+              <FormItem label={serviceSyncSource}>
+                <Select
+                  onChange={serviceSource => this.setState({ search: { ...search, serviceSource } },
+                    () => {
+                      this.queryServiceList();
+                    })}
+                  defaultValue=""
+                >
+                  <Select.Option value="">{allService}</Select.Option>
+                  <Select.Option value="1">{newService}</Select.Option>
+                  <Select.Option value="2">{oldService}</Select.Option>
+                </Select>
+              </FormItem>
               <FormItem label="">
                 <Button
                   type="primary"

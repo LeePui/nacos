@@ -117,6 +117,9 @@ const I18N_CONF = {
     prompt: 'Confirm',
     promptDelete: 'Do you want to delete the service?',
     create: 'Create Service',
+    serviceSyncSource: 'new or old service',
+    oldService: 'old service',
+    newService: 'new service',
   },
   SubscriberList: {
     subscriberList: 'Subscriber List',
