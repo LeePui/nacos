@@ -1175,7 +1175,8 @@ public interface PersistService {
     String generateLikeArgument(String s);
 
     /**
-     * 生成全模糊查询sql
+     * 生成全模糊查询sql.
+     *
      * @param s 目标字段
      * @return 全模糊查询sql
      */
